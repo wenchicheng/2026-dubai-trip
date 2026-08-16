@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#111827">
-  <title>杜拜員工旅遊 6 天｜V6.1 版面節奏優化版</title>
+  <title>杜拜員工旅遊 6 天｜V6.3 行程卡與天氣更新版</title>
   <style>
 
 :root{
@@ -489,6 +489,20 @@ body:not(.home-theme) .merged-block>.section-title h2::before{
 }
 .event.dragging{opacity:.68;transform:scale(.985)}
 .event.drag-over{outline:2px dashed rgba(145,99,49,.55);outline-offset:4px}
+.event.pointer-dragging{
+  opacity:.76;
+  transform:scale(.985);
+  box-shadow:0 18px 38px rgba(64,48,30,.16);
+}
+.event.pointer-target{
+  outline:2px dashed rgba(145,99,49,.62);
+  outline-offset:4px;
+}
+.drag.is-dragging{
+  color:#fff;
+  border-color:var(--gold-dark);
+  background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+}
 .event-top{display:contents}
 .event-content{
   grid-column:1;
@@ -500,16 +514,27 @@ body:not(.home-theme) .merged-block>.section-title h2::before{
 .time-wrap{
   order:-1;
   align-self:flex-start;
-  min-height:36px;
-  margin-bottom:8px;
-  padding:7px 10px;
-  border:1px solid rgba(143,103,58,.14);
-  border-radius:12px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:32px;
+  margin-bottom:9px;
+  padding:5px 9px;
+  border:1px solid rgba(143,103,58,.16);
+  border-radius:10px;
   background:var(--gold-soft);
+}
+.time-wrap::before{
+  content:"預計";
+  color:var(--gold-dark);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.06em;
 }
 .time-wrap input{
   width:auto;
-  min-width:80px;
+  min-width:62px;
+  max-width:88px;
   padding:0;
   border:0;
   color:var(--text);
@@ -520,7 +545,7 @@ body:not(.home-theme) .merged-block>.section-title h2::before{
 .drag{
   grid-column:2;
   grid-row:1 / 3;
-  align-self:start;
+  align-self:center;
   justify-self:center;
   width:40px;
   height:48px;
@@ -533,6 +558,10 @@ body:not(.home-theme) .merged-block>.section-title h2::before{
   font-size:0;
   background:linear-gradient(180deg,#f7ecdc,#ecdbc2);
   cursor:grab;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
 }
 .drag::before{content:"⠿";font-size:22px;font-weight:800}
 .drag:active{cursor:grabbing}
@@ -766,18 +795,17 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
 /* DESKTOP TIMELINE */
 @media(min-width:681px){
   .event{
-    grid-template-columns:142px minmax(0,1fr) 48px;
+    grid-template-columns:minmax(0,1fr) 52px;
     padding:16px 16px 14px 20px;
   }
-  .event-content{display:contents}
-  .event-content>.time-wrap{grid-column:1;grid-row:1;order:0}
-  .event-content>.event-title,
-  .event-content>.event-desc,
-  .event-content>.event-extra,
-  .event-content>.event-tools,
-  .event-content>.event-personal{grid-column:2}
-  .drag{grid-column:3;grid-row:1 / 3}
-  .event-actions{grid-column:2}
+  .event-content{
+    grid-column:1;
+    grid-row:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .drag{grid-column:2;grid-row:1 / 3;align-self:center}
+  .event-actions{grid-column:1}
 }
 
 /* MOBILE */
@@ -1484,12 +1512,12 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
 
 
   const dayWeather={
-    1:{location:'台北',weather:'出發前更新',sunrise:'05:29',sunset:'18:26'},
-    2:{location:'阿布達比',weather:'出發前更新',sunrise:'05:58',sunset:'18:54'},
-    3:{location:'杜拜',weather:'出發前更新',sunrise:'05:54',sunset:'18:50'},
-    4:{location:'杜拜',weather:'出發前更新',sunrise:'05:55',sunset:'18:49'},
-    5:{location:'杜拜',weather:'出發前更新',sunrise:'05:55',sunset:'18:48'},
-    6:{location:'杜拜',weather:'出發前更新',sunrise:'05:56',sunset:'18:47'}
+    1:{location:'台北',weather:'少量降雨｜35–27°C',sunrise:'05:29',sunset:'18:26'},
+    2:{location:'阿布達比',weather:'酷熱｜45–33°C',sunrise:'05:58',sunset:'18:54'},
+    3:{location:'杜拜',weather:'薄霧｜42–34°C',sunrise:'05:54',sunset:'18:50'},
+    4:{location:'杜拜',weather:'薄霧｜41–34°C',sunrise:'05:55',sunset:'18:49'},
+    5:{location:'杜拜',weather:'薄霧｜43–34°C',sunrise:'05:55',sunset:'18:48'},
+    6:{location:'杜拜',weather:'酷熱｜45–37°C',sunrise:'05:56',sunset:'18:47'}
   };
 
 
@@ -1939,17 +1967,34 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
     const b=document.createElement('button');b.type='button';b.className='icon-btn';b.textContent=text;b.title=title;return b;
   }
 
+
+  function reorderSchedule(fromIndex,toIndex){
+    const list=scheduleData[currentDay];
+    if(
+      !Array.isArray(list) ||
+      fromIndex===toIndex ||
+      fromIndex<0 ||
+      toIndex<0 ||
+      fromIndex>=list.length ||
+      toIndex>=list.length
+    ) return;
+    const [moved]=list.splice(fromIndex,1);
+    list.splice(toIndex,0,moved);
+    saveSchedule();
+    renderSchedule();
+  }
+
   function renderSchedule(){
     const box=document.getElementById('schedule');box.innerHTML='';
     (scheduleData[currentDay]||[]).forEach((event,index)=>{
-      const row=document.createElement('article');row.className='event';row.draggable=true;row.dataset.index=index;
+      const row=document.createElement('article');row.className='event';row.dataset.index=index;
       const top=document.createElement('div');top.className='event-top';
 
       const tw=document.createElement('span');tw.className='time-wrap';
       const time=document.createElement('input');time.type='time';time.value=event.time||'';
       time.addEventListener('change',()=>{event.time=time.value;saveSchedule()});tw.appendChild(time);
 
-      const drag=document.createElement('div');drag.className='drag';drag.textContent='⠿';drag.title='拖曳排序';
+      const drag=document.createElement('div');drag.className='drag';drag.textContent='⠿';drag.title='拖曳排序';drag.draggable=true;
 
       const content=document.createElement('div');content.className='event-content';
       const title=document.createElement('div');title.className='event-title';title.contentEditable='true';title.textContent=event.title;
@@ -1969,7 +2014,7 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
       map.className='map-link';
       map.target='_blank';
       map.rel='noopener';
-      map.textContent='📍 Google Maps';
+      map.textContent='📍 Map';
       map.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(mapQueries[event.title]||event.title);
 
       const durationBox=document.createElement('div');
@@ -2046,11 +2091,103 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
       del.addEventListener('click',()=>{scheduleData[currentDay].splice(index,1);saveSchedule();renderSchedule()});
       actions.append(up,down,del);row.append(top,actions);
 
-      row.addEventListener('dragstart',e=>{draggedIndex=index;row.classList.add('dragging');e.dataTransfer.effectAllowed='move'});
-      row.addEventListener('dragend',()=>{row.classList.remove('dragging');document.querySelectorAll('.event').forEach(x=>x.classList.remove('drag-over'))});
+      drag.addEventListener('dragstart',e=>{
+        draggedIndex=index;
+        row.classList.add('dragging');
+        e.dataTransfer.effectAllowed='move';
+        e.dataTransfer.setData('text/plain',String(index));
+      });
+      drag.addEventListener('dragend',()=>{
+        draggedIndex=null;
+        row.classList.remove('dragging');
+        document.querySelectorAll('#schedule .event').forEach(x=>x.classList.remove('drag-over'));
+      });
       row.addEventListener('dragover',e=>{e.preventDefault();row.classList.add('drag-over')});
       row.addEventListener('dragleave',()=>row.classList.remove('drag-over'));
-      row.addEventListener('drop',e=>{e.preventDefault();const target=Number(row.dataset.index);if(draggedIndex===null||draggedIndex===target)return;const [moved]=scheduleData[currentDay].splice(draggedIndex,1);scheduleData[currentDay].splice(target,0,moved);saveSchedule();renderSchedule()});
+      row.addEventListener('drop',e=>{
+        e.preventDefault();
+        const target=Number(row.dataset.index);
+        if(draggedIndex===null||draggedIndex===target)return;
+        reorderSchedule(draggedIndex,target);
+        draggedIndex=null;
+      });
+
+
+      // Mobile / touch drag: use Pointer Events on the dedicated handle.
+      let pointerDragIndex=null;
+      let pointerTargetIndex=null;
+      let activePointerId=null;
+
+      const clearPointerDragState=()=>{
+        row.classList.remove('pointer-dragging');
+        drag.classList.remove('is-dragging');
+        document.querySelectorAll('#schedule .event').forEach(el=>{
+          el.classList.remove('pointer-target');
+        });
+      };
+
+      drag.addEventListener('pointerdown',e=>{
+        if(e.pointerType==='mouse') return; // desktop keeps native HTML5 drag/drop
+        e.preventDefault();
+        activePointerId=e.pointerId;
+        pointerDragIndex=index;
+        pointerTargetIndex=index;
+        row.classList.add('pointer-dragging');
+        drag.classList.add('is-dragging');
+        try{drag.setPointerCapture(e.pointerId)}catch(_){}
+      });
+
+      drag.addEventListener('pointermove',e=>{
+        if(activePointerId!==e.pointerId||pointerDragIndex===null)return;
+        e.preventDefault();
+
+        const el=document.elementFromPoint(e.clientX,e.clientY);
+        const targetRow=el?.closest?.('#schedule .event');
+        document.querySelectorAll('#schedule .event').forEach(card=>{
+          card.classList.remove('pointer-target');
+        });
+
+        if(targetRow){
+          const targetIndex=Number(targetRow.dataset.index);
+          if(Number.isInteger(targetIndex)){
+            pointerTargetIndex=targetIndex;
+            if(targetIndex!==pointerDragIndex){
+              targetRow.classList.add('pointer-target');
+            }
+          }
+        }
+
+        // Auto-scroll near viewport edges while dragging.
+        const edge=90;
+        if(e.clientY<edge){
+          window.scrollBy({top:-12,behavior:'auto'});
+        }else if(e.clientY>window.innerHeight-edge){
+          window.scrollBy({top:12,behavior:'auto'});
+        }
+      });
+
+      const finishPointerDrag=e=>{
+        if(activePointerId!==e.pointerId)return;
+        try{drag.releasePointerCapture(e.pointerId)}catch(_){}
+        const from=pointerDragIndex;
+        const to=pointerTargetIndex;
+        activePointerId=null;
+        pointerDragIndex=null;
+        pointerTargetIndex=null;
+        clearPointerDragState();
+        if(from!==null&&to!==null&&from!==to){
+          reorderSchedule(from,to);
+        }
+      };
+
+      drag.addEventListener('pointerup',finishPointerDrag);
+      drag.addEventListener('pointercancel',e=>{
+        if(activePointerId!==e.pointerId)return;
+        activePointerId=null;
+        pointerDragIndex=null;
+        pointerTargetIndex=null;
+        clearPointerDragState();
+      });
 
       box.appendChild(row);
     });
