@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#111827">
-  <title>杜拜員工旅遊 6 天｜V6.3 行程卡與天氣更新版</title>
+  <title>杜拜員工旅遊 6 天｜V6.5 對應日期與注意事項版</title>
   <style>
 
 :root{
@@ -405,10 +405,90 @@ body:not(.home-theme) .merged-block>.section-title h2::before{
 .cover-subtitle{position:relative;z-index:1;margin-top:6px;font-size:14px;color:rgba(255,255,255,.76)}
 .cover-icon{position:absolute;z-index:1;right:21px;bottom:17px;font-size:48px}
 
-.weather-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.weather-item{padding:12px}
-.weather-item span{display:block;color:var(--muted);font-size:12px}
-.weather-item strong{display:block;margin-top:4px;font-size:15px}
+#weatherStrip{margin-bottom:16px}
+.weather-board{
+  overflow:hidden;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:22px;
+  color:#f8fafc;
+  background:linear-gradient(145deg,#262626 0%,#333 100%);
+  box-shadow:var(--shadow);
+}
+.weather-summary{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-start;
+}
+.weather-place{font-size:14px;color:rgba(255,255,255,.72)}
+.weather-temp{
+  margin-top:4px;
+  font-size:46px;
+  line-height:1;
+  font-weight:300;
+  letter-spacing:-.04em;
+}
+.weather-temp span{font-size:20px;color:rgba(255,255,255,.5)}
+.weather-condition{margin-top:10px;font-size:16px}
+.weather-sun{
+  display:grid;
+  gap:5px;
+  justify-items:end;
+  color:rgba(255,255,255,.72);
+  font-size:13px;
+}
+.weather-sun small{margin-top:4px;color:rgba(255,255,255,.42)}
+.weather-days{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(72px,1fr));
+  gap:7px;
+  margin-top:18px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.weather-days::-webkit-scrollbar{display:none}
+.weather-day{
+  min-width:72px;
+  padding:9px 6px;
+  border:0;
+  border-radius:14px;
+  color:#fff;
+  text-align:center;
+  background:transparent;
+}
+.weather-day span,.weather-day strong,.weather-day em{display:block}
+.weather-day span{font-size:11px;color:rgba(255,255,255,.62)}
+.weather-day b{display:block;margin:5px 0;font-size:20px}
+.weather-day strong{font-size:17px}
+.weather-day em{margin-top:2px;color:rgba(255,255,255,.48);font-size:13px;font-style:normal}
+.weather-day.active{background:rgba(255,255,255,.12)}
+.weather-chart-wrap{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.10);
+}
+.weather-chart-title{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  color:rgba(255,255,255,.78);
+  font-size:12px;
+}
+.weather-legend{display:flex;gap:6px;align-items:center;color:rgba(255,255,255,.5)}
+.weather-legend i{width:14px;height:2px;display:inline-block;border-radius:99px}
+.weather-legend i.high{background:#fff}
+.weather-legend i.low{background:#d6a25f}
+.weather-chart{display:block;width:100%;height:auto;margin-top:6px;overflow:visible}
+.weather-line{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.weather-line.high{stroke:#fff}
+.weather-line.low{stroke:#d6a25f}
+.weather-dot.high{fill:#fff;stroke:#2f2f2f;stroke-width:2}
+.weather-dot.high.active{fill:#d6a25f}
+.weather-dot.low{fill:#d6a25f;stroke:#2f2f2f;stroke-width:2}
+.weather-value{fill:#fff;font-size:11px;font-weight:700}
+.weather-value.low-label{fill:rgba(255,255,255,.52)}
 .daily-water,.highlights,.daily-reminder{margin-bottom:16px;padding:16px}
 .daily-water-head,.highlights-head,.daily-reminder-head,.info-panel-head{
   display:flex;
@@ -808,8 +888,37 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
   .event-actions{grid-column:1}
 }
 
+
+
+.notice-category-card + .notice-category-card{margin-top:14px}
+.notice-category-card h3{margin-bottom:6px}
+
+.etiquette-list{
+  margin:12px 0 0;
+  padding-left:22px;
+}
+.etiquette-list li{
+  margin:10px 0;
+  padding-left:3px;
+  line-height:1.65;
+  color:var(--muted);
+}
+.etiquette-list strong{color:var(--text)}
+.emergency-list a{
+  color:var(--gold-dark);
+  font-weight:750;
+  text-decoration:none;
+}
+
 /* MOBILE */
 @media(max-width:680px){
+  .weather-board{padding:14px;border-radius:19px}
+  .weather-summary{gap:10px}
+  .weather-temp{font-size:40px}
+  .weather-sun{font-size:11px}
+  .weather-days{grid-template-columns:repeat(6,78px);gap:5px}
+  .weather-chart-title{align-items:flex-start;flex-direction:column}
+
   .app{width:min(100% - 14px,820px);padding-top:8px}
   .masthead{padding:19px;border-radius:24px}
   .facts{grid-template-columns:1fr 1fr}
@@ -1131,12 +1240,12 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
       <article class="detail-card" id="place-louvre">
         <span class="notice-tag">② 8/19（三）</span><h3>🏛️ 羅浮宮博物館</h3>
         <p class="small muted">建議先下載 Louvre Abu Dhabi App 並自備耳機；大型包或超過 A4 尺寸的背包須寄放。</p>
-        <div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Louvre%20Abu%20Dhabi">📍 Google Maps</a><button class="cross-link" data-go-page="itinerary">返回每日行程</button></div>
+        <div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Louvre%20Abu%20Dhabi">📍 Google Maps</a><button class="cross-link" data-go-page="itinerary" data-day="2">返回每日行程</button></div>
       </article>
       <article class="detail-card" id="place-mosque">
         <span class="notice-tag">② 8/19（三）</span><h3>🕌 阿布達比大清真寺</h3>
         <p class="small muted">男士不可穿無袖及短褲；女士須穿不透明長袖、長褲至腳踝並戴頭巾。</p>
-        <div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sheikh%20Zayed%20Grand%20Mosque%20Abu%20Dhabi">📍 Google Maps</a><button class="cross-link" data-go-page="itinerary">返回每日行程</button></div>
+        <div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sheikh%20Zayed%20Grand%20Mosque%20Abu%20Dhabi">📍 Google Maps</a><button class="cross-link" data-go-page="itinerary" data-day="2">返回每日行程</button></div>
       </article>
       <article class="detail-card" id="place-desert">
         <span class="notice-tag">③ 8/20（四）</span><h3>🏜️ 四輪傳動沙漠之旅</h3>
@@ -1147,7 +1256,7 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
           <li>20:30–21:00 結束，原車返回飯店。</li>
           <li>司機小費自發性，每車可參考 10–12 美元。</li>
         </ul>
-        <div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Dubai%20Desert%20Safari">📍 Google Maps</a><button class="cross-link" data-go-page="itinerary">返回每日行程</button></div>
+        <div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Dubai%20Desert%20Safari">📍 Google Maps</a><button class="cross-link" data-go-page="itinerary" data-day="3">返回每日行程</button></div>
       </article>
       <article class="detail-card" id="place-burj"><span class="notice-tag">④ 8/21（五）</span><h3>🏙️ 哈里發塔 124 層</h3><div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Burj%20Khalifa">📍 Google Maps</a></div></article>
             <article class="detail-card" id="place-dubaimall">
@@ -1155,11 +1264,39 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
         <h3>The Dubai Mall</h3>
         <p class="small muted">晚餐自理與自由活動地點，請留意集合時間。</p>
         <div class="detail-actions">
-          <a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=The%20Dubai%20Mall">Google Maps</a>
+          <a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=The%20Dubai%20Mall">📍 Map</a>
+          <a class="detail-link soft" target="_blank" rel="noopener" href="https://thedubaimall.com/en/map">🗺 線上地圖</a>
           <button class="cross-link" data-go-page="stay" data-target="meal-4">查看當日餐食</button>
         </div>
       </article>
-      <article class="detail-card" id="place-aquaventure"><span class="notice-tag">⑤ 8/22（六）</span><h3>🌊 Aquaventure 水世界</h3><p class="small muted">準備泳裝、泳帽、泳鏡、拖鞋、防曬用品及毛巾。</p><div class="detail-actions"><a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Aquaventure%20World%20Dubai">📍 Google Maps</a><button class="cross-link" data-go-page="stay" data-target="hotel-atlantis">查看 Atlantis</button></div></article>
+      <article class="detail-card" id="place-aquaventure">
+        <span class="notice-tag">⑤ 8/22（六）</span>
+        <h3>🌊 Waterpark 水世界冒險樂園</h3>
+        <p class="small muted">Atlantis Aquaventure 水上樂園。建議準備泳裝、泳鏡、泳帽／束髮用品、拖鞋、防曬用品及防水手機袋。</p>
+        <ul class="mini-list">
+          <li><strong>營業時間：</strong>Fri－Sun 10:00－20:00</li>
+          <li>8/22 為星期六，適用上述營業時間。</li>
+          <li>大型設施與活動依現場開放狀況為準。</li>
+        </ul>
+        <div class="detail-actions">
+          <a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Aquaventure%20World%20Dubai">📍 Map</a>
+          <a class="detail-link soft" target="_blank" rel="noopener" href="https://aquaventureworld.invisual.app/?mapId=4N9JajwyVr5lY">🗺 官方互動地圖</a>
+          <button class="cross-link" data-go-page="stay" data-target="hotel-atlantis">查看 Atlantis</button>
+        </div>
+      </article>
+      <article class="detail-card" id="place-lostworld">
+        <span class="notice-tag">⑤ 8/22（六）</span>
+        <h3>🐠 Lost World Aquarium 失落的世界水族館</h3>
+        <p class="small muted">Atlantis 館內水族館，可安排於水世界或飯店自由活動時間參觀。</p>
+        <ul class="mini-list">
+          <li><strong>營業時間：</strong>11:00－20:00</li>
+          <li>實際入場與最後入場時間依現場公告為準。</li>
+        </ul>
+        <div class="detail-actions">
+          <a class="detail-link" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Lost%20World%20Aquarium%20Atlantis%20The%20Palm">📍 Map</a>
+          <a class="detail-link soft" target="_blank" rel="noopener" href="https://aquaventureworld.invisual.app/?mapId=4N9JajwyVr5lY">🗺 官方互動地圖</a>
+        </div>
+      </article>
     
 
       <article class="detail-card" id="place-founder">
@@ -1321,17 +1458,84 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
       </article>
         </div>
       </section>
+      <section class="accordion-item" data-accordion="etiquette">
+        <button class="accordion-trigger" type="button">注意事項</button>
+        <div class="accordion-panel">
+          <article class="detail-card notice-category-card">
+            <span class="notice-tag">文化禮儀</span>
+            <h3>宗教與互動禮儀</h3>
+            <ol class="etiquette-list">
+              <li><strong>飲食與攜帶物：</strong>團體行前建議不要攜帶豬肉／肉製品及酒類。若仍攜帶酒類，請依杜拜海關免稅限額及申報規定辦理；肉類與動物產品可能涉及申報，請以海關現場規定為準。</li>
+              <li><strong>與當地女性互動：</strong>不要主動握手；拍攝任何人，尤其戴面紗的女性前，務必先取得同意。政府機關、軍警或其他重要設施也可能禁止攝影，拍攝前先確認。</li>
+              <li><strong>清真寺服裝：</strong>女性須依規定遮蓋頭髮與身體，穿不透明長袖及長褲／長裙至腳踝；不符規定可能無法入內。</li>
+              <li><strong>以右為尊：</strong>進門、用餐、遞名片、送禮或接物品時，優先使用右手；避免以左手遞食物或禮品。</li>
+              <li><strong>餐桌禮儀：</strong>避免主動碰杯敬酒。用餐先入座，再打開餐巾取餐；不要拿餐巾紙反覆擦拭杯盤，以免造成對餐具清潔度的質疑。</li>
+            </ol>
+          </article>
+
+          <article class="detail-card notice-category-card">
+            <span class="notice-tag">營業事項</span>
+            <h3>商場與營業時間</h3>
+            <ul class="mini-list">
+              <li>大型商場多約 10:00 起營業。</li>
+              <li>週五祈禱時段與個別店家營業時間可能調整，請以當日商場／店家公告為準。</li>
+            </ul>
+          </article>
+
+          <article class="detail-card notice-category-card">
+            <span class="notice-tag">參觀事項</span>
+            <h3>景點與場館提醒</h3>
+            <ul class="mini-list">
+              <li><strong>阿布達比羅浮宮：</strong>攜帶後背包或中大型包包時，須依館方規定寄放。</li>
+              <li>政府機關、軍警設施及部分重要場所可能禁止攝影，拍照前先確認。</li>
+            </ul>
+          </article>
+</div>
+      </section>
       <section class="accordion-item" data-accordion="contacts">
         <button class="accordion-trigger" type="button">緊急聯絡</button>
         <div class="accordion-panel">
           <article class="detail-card">
-        <span class="notice-tag">駐外單位</span><h3>駐杜拜臺北商務辦事處</h3>
-        <ul class="mini-list">
-          <li>電話：+971 4 397 7888</li>
-          <li>緊急電話：+971 50 645 3018</li>
-          <li>電子郵件：dxb@mofa.gov.tw</li>
-        </ul>
-      </article>
+            <span class="notice-tag">台灣駐外單位</span>
+            <h3>駐杜拜臺北商務辦事處</h3>
+            <p class="small muted">The Commercial Office of Taipei, Dubai, U.A.E.</p>
+            <ul class="mini-list emergency-list">
+              <li><strong>地址：</strong>Office M-01, M. Fl, Sharaf Travel Building, 153 Khalid Bin Al Waleed St., Umm Hurair 1, Bur Dubai, Dubai, U.A.E.</li>
+              <li><strong>電話：</strong><a href="tel:+97143977888">+971 4 397 7888</a></li>
+              <li><strong>傳真：</strong>+971 4 397 7644</li>
+              <li><strong>E-mail：</strong><a href="mailto:dxb@mofa.gov.tw">dxb@mofa.gov.tw</a></li>
+              <li><strong>緊急電話：</strong><a href="tel:+971506453018">+971 50 645 3018</a></li>
+              <li><strong>領務收件：</strong>08:00－12:00</li>
+              <li><strong>領務取件：</strong>13:30－14:30</li>
+              <li><strong>2026/8/19：</strong>外交部目前公告為駐處休假日；緊急事故請使用急難救助電話。</li>
+            </ul>
+            <div class="detail-actions">
+              <a class="detail-link" target="_blank" rel="noopener" href="https://www.roc-taiwan.org/dxb/">官方網站</a>
+            </div>
+          </article>
+
+          <article class="detail-card">
+            <span class="notice-tag">台灣外交部</span>
+            <h3>旅外急難救助</h3>
+            <ul class="mini-list emergency-list">
+              <li><strong>海外付費撥回台灣：</strong><a href="tel:+886800085095">+886-800-085-095</a></li>
+              <li><strong>全球免付費專線：</strong>800-0885-0885（僅適用外交部公告的指定國家／地區；目前名單未列阿聯酋，請勿以此作為在杜拜的主要聯絡方式。）</li>
+              <li>海外遇重大急難且無法聯絡駐處時，可撥外交部緊急聯絡中心。</li>
+            </ul>
+          </article>
+
+          <article class="detail-card">
+            <span class="notice-tag">Dubai Tourism</span>
+            <h3>Dubai Department of Economy and Tourism</h3>
+            <p class="small muted">現行官方名稱為 Dubai Department of Economy and Tourism（DET；原 DTCM）。</p>
+            <ul class="mini-list">
+              <li><strong>電話（行前資料）：</strong>+971 4 223 0000</li>
+              <li>可查詢旅遊資訊、交通、景點與行程相關服務。</li>
+            </ul>
+            <div class="detail-actions">
+              <a class="detail-link" target="_blank" rel="noopener" href="https://www.visitdubai.com/">Visit Dubai 官方網站</a>
+            </div>
+          </article>
         </div>
       </section>
       <section class="accordion-item" data-accordion="luggage" id="tools-luggage">
@@ -1397,7 +1601,7 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
     ],
     2:[
       {time:'04:35',title:'抵達杜拜',desc:'入境前摘除隱形眼鏡'},
-      {time:'09:00',title:'羅浮宮博物館',desc:'建議使用 App 中文導覽'},
+      {time:'09:00',title:'羅浮宮博物館',desc:'建議使用 App 中文導覽；攜帶後背包或中大型包包時，須依館方規定寄放。'},
       {time:'13:30',title:'國父紀念館',desc:'阿布達比'},
       {time:'16:00',title:'阿布達比大清真寺',desc:'請遵守服裝規定'}
     ],
@@ -1512,12 +1716,12 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
 
 
   const dayWeather={
-    1:{location:'台北',weather:'少量降雨｜35–27°C',sunrise:'05:29',sunset:'18:26'},
-    2:{location:'阿布達比',weather:'酷熱｜45–33°C',sunrise:'05:58',sunset:'18:54'},
-    3:{location:'杜拜',weather:'薄霧｜42–34°C',sunrise:'05:54',sunset:'18:50'},
-    4:{location:'杜拜',weather:'薄霧｜41–34°C',sunrise:'05:55',sunset:'18:49'},
-    5:{location:'杜拜',weather:'薄霧｜43–34°C',sunrise:'05:55',sunset:'18:48'},
-    6:{location:'杜拜',weather:'酷熱｜45–37°C',sunrise:'05:56',sunset:'18:47'}
+    1:{date:'8/18',weekday:'二',location:'台北',condition:'多雲',icon:'☁️',high:31,low:27,sunrise:'05:29',sunset:'18:26'},
+    2:{date:'8/19',weekday:'三',location:'阿布達比',condition:'炎熱',icon:'☀️',high:42,low:31,sunrise:'05:58',sunset:'18:54'},
+    3:{date:'8/20',weekday:'四',location:'杜拜',condition:'薄霧',icon:'🌫️',high:42,low:34,sunrise:'05:54',sunset:'18:50'},
+    4:{date:'8/21',weekday:'五',location:'杜拜',condition:'薄霧',icon:'🌫️',high:41,low:34,sunrise:'05:55',sunset:'18:49'},
+    5:{date:'8/22',weekday:'六',location:'杜拜',condition:'薄霧',icon:'🌫️',high:43,low:34,sunrise:'05:55',sunset:'18:48'},
+    6:{date:'8/23',weekday:'日',location:'杜拜',condition:'多雲',icon:'☁️',high:45,low:37,sunrise:'05:56',sunset:'18:47'}
   };
 
 
@@ -1814,6 +2018,18 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
   document.addEventListener('click',event=>{
     const trigger=event.target.closest('[data-go-page]');
     if(!trigger)return;
+    const targetDay=Number(trigger.dataset.day||0);
+    if(targetDay>=1&&targetDay<=6){
+      currentDay=targetDay;
+      renderDayTabs();
+      renderDayVisuals();
+      renderWeather();
+      renderDailyWater();
+      renderHighlights();
+      renderDayInfo();
+      renderReturnGuide();
+      renderSchedule();
+    }
     openPage(trigger.dataset.goPage,trigger.dataset.target||'');
   });
 
@@ -1866,11 +2082,92 @@ input[type=text],.insurance-input,.converter-grid select,.converter-grid input{
   function renderWeather(){
     const w=dayWeather[currentDay];
     const box=document.getElementById('weatherStrip');
+    const days=Object.entries(dayWeather).map(([day,data])=>({day:Number(day),...data}));
+
+    const highs=days.map(d=>d.high);
+    const lows=days.map(d=>d.low);
+    const minTemp=Math.min(...lows)-1;
+    const maxTemp=Math.max(...highs)+1;
+    const chartW=620, chartH=150, padX=30, padTop=28, padBottom=30;
+    const span=Math.max(1,maxTemp-minTemp);
+    const x=i=>padX+i*((chartW-padX*2)/(days.length-1));
+    const y=v=>padTop+(maxTemp-v)/span*(chartH-padTop-padBottom);
+    const highPoints=days.map((d,i)=>`${x(i)},${y(d.high)}`).join(' ');
+    const lowPoints=days.map((d,i)=>`${x(i)},${y(d.low)}`).join(' ');
+
+    const highLabels=days.map((d,i)=>`
+      <g>
+        <circle cx="${x(i)}" cy="${y(d.high)}" r="${d.day===currentDay?5:4}" class="weather-dot high ${d.day===currentDay?'active':''}"></circle>
+        <text x="${x(i)}" y="${y(d.high)-10}" text-anchor="middle" class="weather-value">${d.high}°</text>
+      </g>`).join('');
+
+    const lowLabels=days.map((d,i)=>`
+      <g>
+        <circle cx="${x(i)}" cy="${y(d.low)}" r="3.5" class="weather-dot low"></circle>
+        <text x="${x(i)}" y="${y(d.low)+19}" text-anchor="middle" class="weather-value low-label">${d.low}°</text>
+      </g>`).join('');
+
     box.innerHTML=`
-      <div class="weather-item"><span>🌤️ ${w.location}天氣</span><strong>${w.weather}</strong></div>
-      <div class="weather-item"><span>🌅 日出</span><strong>${w.sunrise}</strong></div>
-      <div class="weather-item"><span>🌇 日落</span><strong>${w.sunset}</strong></div>
+      <section class="weather-board">
+        <div class="weather-summary">
+          <div>
+            <div class="weather-place">${w.location}・${w.date}（${w.weekday}）</div>
+            <div class="weather-temp">${w.high}°<span> / ${w.low}°</span></div>
+            <div class="weather-condition">${w.icon} ${w.condition}</div>
+          </div>
+          <div class="weather-sun">
+            <span>🌅 ${w.sunrise}</span>
+            <span>🌇 ${w.sunset}</span>
+            <small>更新：8/17</small>
+          </div>
+        </div>
+
+        <div class="weather-days">
+          ${days.map(d=>`
+            <button class="weather-day ${d.day===currentDay?'active':''}" type="button" data-weather-day="${d.day}">
+              <span>週${d.weekday}</span>
+              <b>${d.icon}</b>
+              <strong>${d.high}°</strong>
+              <em>${d.low}°</em>
+            </button>`).join('')}
+        </div>
+
+        <div class="weather-chart-wrap">
+          <div class="weather-chart-title">
+            <span>旅行期間溫度趨勢</span>
+            <span class="weather-legend"><i class="high"></i>高溫 <i class="low"></i>低溫</span>
+          </div>
+          <svg class="weather-chart" viewBox="0 0 ${chartW} ${chartH}" role="img" aria-label="六日高低溫趨勢圖">
+            <defs>
+              <linearGradient id="weatherArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#d6a25f" stop-opacity=".28"></stop>
+                <stop offset="100%" stop-color="#d6a25f" stop-opacity="0"></stop>
+              </linearGradient>
+            </defs>
+            <polyline points="${highPoints}" class="weather-line high"></polyline>
+            <polyline points="${lowPoints}" class="weather-line low"></polyline>
+            ${highLabels}
+            ${lowLabels}
+          </svg>
+        </div>
+      </section>
     `;
+
+    box.querySelectorAll('[data-weather-day]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const day=Number(btn.dataset.weatherDay);
+        if(day===currentDay)return;
+        currentDay=day;
+        renderDayTabs();
+        renderDayVisuals();
+        renderWeather();
+        renderDailyWater();
+        renderHighlights();
+        renderDayInfo();
+        renderReturnGuide();
+        renderSchedule();
+      });
+    });
   }
 
 
